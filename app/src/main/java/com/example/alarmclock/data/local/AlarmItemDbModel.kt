@@ -10,7 +10,7 @@ import java.time.LocalDateTime
 data class AlarmItemDbModel(
     @PrimaryKey
     val id: Int,
-    val time: LocalDateTime,
+    val time: String,
     val title: String,
     val enabled: Boolean
 )

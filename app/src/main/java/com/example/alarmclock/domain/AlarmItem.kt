@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 @Parcelize
 data class AlarmItem(
     val id: Int,
-    val time: LocalDateTime,
+    val time: String,
     val title: String,
     val enabled: Boolean
 ): Parcelable
