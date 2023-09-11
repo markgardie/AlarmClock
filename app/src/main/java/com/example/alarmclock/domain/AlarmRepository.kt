@@ -10,4 +10,6 @@ interface AlarmRepository {
 
     suspend fun updateAlarm(alarm: AlarmItem)
 
+    suspend fun deleteAlarm(alarmId: Int)
+
 }

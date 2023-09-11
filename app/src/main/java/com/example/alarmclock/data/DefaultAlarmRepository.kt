@@ -24,4 +24,8 @@ class DefaultAlarmRepository @Inject constructor(
     override suspend fun updateAlarm(alarm: AlarmItem) {
         alarmDao.updateAlarm(alarm.asDbModel())
     }
+
+    override suspend fun deleteAlarm(alarmId: Int) {
+        alarmDao.deleteAlarm(alarmId)
+    }
 }
