@@ -1,17 +1,21 @@
-package com.example.alarmclock.ui
+package com.example.alarmclock
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.example.alarmclock.ui.screens.AlarmListScreen
 import com.example.alarmclock.ui.theme.AlarmClockTheme
+import com.example.alarmclock.ui.viewmodels.AlarmViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,25 +26,18 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Greeting("Android")
+                    val viewModel by viewModels<AlarmViewModel>()
+                    val uiState by viewModel.uiState.collectAsState()
+
+                    AlarmListScreen(
+                        alarmUiState = uiState,
+                        onAddAlarm = viewModel::addAlarm,
+                        onDeleteAlarm = viewModel::deleteAlarm,
+                        onUpdateAlarm = viewModel::updateAlarm
+                    )
                 }
             }
         }
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    AlarmClockTheme {
-        Greeting("Android")
-    }
-}
