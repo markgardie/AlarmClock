@@ -3,6 +3,7 @@ package com.example.alarmclock.ui.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -88,7 +89,9 @@ fun AlarmsList(
 ) {
 
     LazyColumn(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
+            .padding(16.dp)
     ) {
         items(alarms) {
             AlarmCard(
@@ -107,7 +110,9 @@ fun AlarmCard(
     alarm: AlarmItem,
 ) {
     Card(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
     ) {
         Row(
             modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
@@ -130,7 +135,7 @@ fun AlarmCard(
 
             Switch(modifier = modifier.padding(8.dp), checked = checked, onCheckedChange = {
                 checked = it
-                onSwitchChange?.invoke(alarm.copy(enabled = it))
+                onSwitchChange.invoke(alarm.copy(enabled = it))
             })
         }
     }

@@ -46,7 +46,7 @@ fun AddAlarmScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        var timePickerState = rememberTimePickerState()
+        var timePickerState = rememberTimePickerState(is24Hour = true)
         var title by remember {
             mutableStateOf("")
         }
