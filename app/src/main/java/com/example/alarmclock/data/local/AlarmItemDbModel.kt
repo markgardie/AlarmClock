@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 
 @Entity(tableName = "alarms")
 data class AlarmItemDbModel(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val id: Int,
     val time: String,
     val title: String,

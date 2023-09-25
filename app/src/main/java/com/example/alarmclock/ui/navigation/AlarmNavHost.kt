@@ -25,7 +25,9 @@ fun AlarmNavHost() {
                 onAddButtonClick = navController::navigateToAddAlarm
             )
 
-            addAlarmScreen()
+            addAlarmScreen(
+                onAddButtonClick = navController::navigateToAlarmList
+            )
         }
 
     }

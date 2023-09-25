@@ -12,10 +12,12 @@ fun NavController.navigateToAddAlarm(navOptions: NavOptions? = null) {
     this.navigate(addAlarmRoute, navOptions)
 }
 
-fun NavGraphBuilder.addAlarmScreen() {
+fun NavGraphBuilder.addAlarmScreen(
+    onAddButtonClick: () -> Unit
+) {
     composable(
         addAlarmRoute
     ) {
-        AddAlarmRoute()
+        AddAlarmRoute(onAddButtonClick = onAddButtonClick)
     }
 }
