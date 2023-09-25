@@ -24,45 +24,27 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import com.example.alarmclock.domain.AlarmItem
 import com.example.alarmclock.ui.viewmodels.AlarmUiState
 import com.example.alarmclock.ui.viewmodels.AlarmViewModel
 
-const val alarmListRoute = "alarm_list"
-
-fun NavController.navigateToAlarmList(navOptions: NavOptions? = null) {
-    this.navigate(alarmListRoute, navOptions)
-}
-
-fun NavGraphBuilder.alarmListScreen() {
-    composable(
-        route = alarmListRoute
-    ) {
-
-        AlarmListRoute()
-    }
-}
 
 @Composable
 fun AlarmListRoute(
-    viewModel: AlarmViewModel = hiltViewModel(), modifier: Modifier = Modifier
+    viewModel: AlarmViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier,
+    onAddButtonClick: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     AlarmListScreen(
         alarmUiState = uiState,
-        onAddAlarm = viewModel::addAlarm,
-        onDeleteAlarm = viewModel::deleteAlarm,
-        onUpdateAlarm = viewModel::updateAlarm,
+        onAddButtonClick = onAddButtonClick,
+        onSwitchChange = viewModel::updateAlarm,
         modifier = modifier
     )
 
@@ -71,19 +53,16 @@ fun AlarmListRoute(
 @Composable
 fun AlarmListScreen(
     alarmUiState: AlarmUiState,
-    onAddAlarm: (AlarmItem) -> Unit,
-    onDeleteAlarm: (Int) -> Unit,
-    onUpdateAlarm: (AlarmItem) -> Unit,
+    onAddButtonClick: () -> Unit,
+    onSwitchChange: (AlarmItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
 
     when (alarmUiState) {
         is AlarmUiState.Success -> AlarmsList(
             modifier = modifier,
-            alarmUiState.alarms,
-            onDeleteAlarm,
-            onUpdateAlarm
-        )
+            alarms =  alarmUiState.alarms,
+            onSwitchChange = onSwitchChange)
 
         is AlarmUiState.Empty -> EmptyState(modifier = modifier)
 
@@ -94,7 +73,7 @@ fun AlarmListScreen(
     Box(contentAlignment = Alignment.BottomEnd) {
         FloatingActionButton(
             modifier = modifier.padding(16.dp),
-            onClick = { /*TODO*/ }) {
+            onClick = { onAddButtonClick() }) {
             Icon(imageVector = Icons.Filled.Add, contentDescription = "Add new alarm")
         }
     }
@@ -104,9 +83,8 @@ fun AlarmListScreen(
 @Composable
 fun AlarmsList(
     modifier: Modifier = Modifier,
-    alarms: List<AlarmItem>,
-    onDeleteAlarm: (Int) -> Unit,
-    onUpdateAlarm: (AlarmItem) -> Unit
+    onSwitchChange: (AlarmItem) -> Unit,
+    alarms: List<AlarmItem>
 ) {
 
     LazyColumn(
@@ -115,8 +93,7 @@ fun AlarmsList(
         items(alarms) {
             AlarmCard(
                 alarm = it,
-                onDeleteAlarm = onDeleteAlarm,
-                onUpdateAlarm = onUpdateAlarm
+                onSwitchChange = onSwitchChange
             )
         }
     }
@@ -126,9 +103,8 @@ fun AlarmsList(
 @Composable
 fun AlarmCard(
     modifier: Modifier = Modifier,
+    onSwitchChange: (AlarmItem) -> Unit,
     alarm: AlarmItem,
-    onDeleteAlarm: (Int) -> Unit,
-    onUpdateAlarm: (AlarmItem) -> Unit
 ) {
     Card(
         modifier = modifier.fillMaxWidth()
@@ -154,7 +130,7 @@ fun AlarmCard(
 
             Switch(modifier = modifier.padding(8.dp), checked = checked, onCheckedChange = {
                 checked = it
-                onUpdateAlarm?.invoke(alarm.copy(enabled = it))
+                onSwitchChange?.invoke(alarm.copy(enabled = it))
             })
         }
     }
