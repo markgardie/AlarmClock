@@ -12,7 +12,7 @@ data class AlarmItem(
 ) : Parcelable {
 
     companion object {
-        const val UNDEFINED_ID = -1
+        const val UNDEFINED_ID = 0
     }
 
 }
