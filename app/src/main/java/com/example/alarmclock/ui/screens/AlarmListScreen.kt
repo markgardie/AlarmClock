@@ -16,6 +16,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -119,13 +120,15 @@ fun AlarmCard(
         ) {
             Column(
                 modifier = modifier.padding(8.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = alarm.time, fontSize = 24.sp
+                    text = alarm.time,
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Text(
-                    text = alarm.title, fontSize = 14.sp
+                    text = alarm.title,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
 
