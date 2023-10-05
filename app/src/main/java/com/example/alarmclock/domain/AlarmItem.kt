@@ -6,7 +6,8 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 data class AlarmItem(
     val id: Int = UNDEFINED_ID,
-    val time: String,
+    val hours: String,
+    val minutes: String,
     val title: String,
     val enabled: Boolean
 ) : Parcelable {

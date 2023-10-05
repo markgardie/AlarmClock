@@ -188,7 +188,7 @@ fun AlarmCard(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = alarm.time,
+                    text = "${alarm.hours}:${alarm.minutes}",
                     style = MaterialTheme.typography.titleLarge
                 )
                 Text(

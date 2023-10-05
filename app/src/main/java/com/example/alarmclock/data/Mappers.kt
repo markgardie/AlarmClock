@@ -6,13 +6,15 @@ import com.example.alarmclock.domain.AlarmItem
 fun AlarmItemDbModel.asEntity() = AlarmItem(
     id = id,
     title = title,
-    time = time,
+    hours = hours,
+    minutes = minutes,
     enabled = enabled
 )
 
 fun AlarmItem.asDbModel() = AlarmItemDbModel(
     id = id,
     title = title,
-    time = time,
+    hours = hours,
+    minutes = minutes,
     enabled = enabled
 )

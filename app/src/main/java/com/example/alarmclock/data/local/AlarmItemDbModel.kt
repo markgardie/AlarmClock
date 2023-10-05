@@ -10,7 +10,8 @@ import java.time.LocalDateTime
 data class AlarmItemDbModel(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val time: String,
+    val hours: String,
+    val minutes: String,
     val title: String,
     val enabled: Boolean
 )

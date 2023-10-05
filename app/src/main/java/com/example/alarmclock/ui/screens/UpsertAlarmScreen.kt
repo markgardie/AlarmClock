@@ -14,31 +14,48 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.alarmclock.domain.AlarmItem
+import com.example.alarmclock.ui.navigation.DEFAULT_ALARM_ID
+import com.example.alarmclock.ui.viewmodels.AlarmUiState
 import com.example.alarmclock.ui.viewmodels.AlarmViewModel
 
 
+
+
 @Composable
-fun AddAlarmRoute(
+fun UpsertAlarmRoute(
     viewModel: AlarmViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
-    onAddButtonClick: () -> Unit
+    onAddButtonClick: () -> Unit,
+    alarmId: Int? = null,
 ) {
 
-    AddAlarmScreen(
-        addAlarm = viewModel::addAlarm,
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    val alarms = when(uiState) {
+        is AlarmUiState.Success -> (uiState as AlarmUiState.Success).alarms
+        else -> emptyList()
+    }
+
+    val alarm = parseAlarmItem(alarms, alarmId ?: DEFAULT_ALARM_ID)
+
+    UpsertAlarmScreen(
+        upsertAlarm = if (alarmId == DEFAULT_ALARM_ID) viewModel::addAlarm else viewModel::updateAlarm,
         modifier = modifier,
-        onAddButtonClick = onAddButtonClick
+        onAddButtonClick = onAddButtonClick,
+        alarmItem = alarm
     )
 
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddAlarmScreen(
-    addAlarm: (AlarmItem) -> Unit,
+fun UpsertAlarmScreen(
+    upsertAlarm: (AlarmItem) -> Unit,
     onAddButtonClick: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier,
+    alarmItem: AlarmItem?
 ) {
 
     Column(
@@ -46,24 +63,29 @@ fun AddAlarmScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        var timePickerState = rememberTimePickerState(is24Hour = true)
-        var title by remember {
-            mutableStateOf("")
+        val timePickerState = rememberTimePickerState(
+            is24Hour = true,
+            initialHour = alarmItem?.hours?.toInt() ?: 0,
+            initialMinute = alarmItem?.minutes?.toInt() ?: 0
+        )
+        var titleField by remember {
+            mutableStateOf(alarmItem?.title ?: "")
         }
         
         TimePicker(state = timePickerState)
 
         TextField(
-            value = title,
-            onValueChange = { title = it },
+            value = titleField,
+            onValueChange = { titleField = it },
             label = { Text("Title") }
         )
         
         Button(onClick = {
-            addAlarm(
+            upsertAlarm(
                 AlarmItem(
-                    time = "${timePickerState.hour}:${timePickerState.minute}",
-                    title = title,
+                    hours = "${timePickerState.hour}",
+                    minutes = "${timePickerState.minute}",
+                    title = titleField,
                     enabled = false
                 )
             )
@@ -75,3 +97,12 @@ fun AddAlarmScreen(
 
 }
 
+fun parseAlarmItem(list: List<AlarmItem>, id: Int): AlarmItem? {
+
+    for (alarm in list) {
+        if (alarm.id == id) {
+            return alarm
+        }
+    }
+    return null
+}
