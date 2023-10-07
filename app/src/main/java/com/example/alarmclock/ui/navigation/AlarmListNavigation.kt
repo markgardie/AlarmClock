@@ -13,12 +13,14 @@ fun NavController.navigateToAlarmList(navOptions: NavOptions? = null) {
 }
 
 fun NavGraphBuilder.alarmListScreen(
-    onAddButtonClick: () -> Unit
+    navigateToUpsert: (Int) -> Unit
 ) {
     composable(
         route = alarmListRoute
     ) {
 
-        AlarmListRoute(onAddButtonClick = onAddButtonClick)
+        AlarmListRoute(
+            navigateToUpsert = navigateToUpsert
+        )
     }
 }

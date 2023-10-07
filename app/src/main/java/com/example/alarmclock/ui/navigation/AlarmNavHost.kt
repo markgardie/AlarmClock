@@ -22,11 +22,13 @@ fun AlarmNavHost() {
             startDestination = alarmListRoute
         ) {
             alarmListScreen(
-                onAddButtonClick = navController::navigateToUpsertAlarm
+                navigateToUpsert = {
+                    navController.navigateToUpsertAlarm(it)
+                }
             )
 
             upsertAlarmScreen(
-                onAddButtonClick = navController::navigateToAlarmList
+                navigateToList = navController::navigateToAlarmList
             )
         }
 

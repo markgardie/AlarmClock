@@ -27,7 +27,7 @@ import com.example.alarmclock.ui.viewmodels.AlarmViewModel
 fun UpsertAlarmRoute(
     viewModel: AlarmViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
-    onAddButtonClick: () -> Unit,
+    navigateToList: () -> Unit,
     alarmId: Int? = null,
 ) {
 
@@ -43,7 +43,7 @@ fun UpsertAlarmRoute(
     UpsertAlarmScreen(
         upsertAlarm = if (alarmId == DEFAULT_ALARM_ID) viewModel::addAlarm else viewModel::updateAlarm,
         modifier = modifier,
-        onAddButtonClick = onAddButtonClick,
+        navigateToList = navigateToList,
         alarmItem = alarm
     )
 
@@ -53,7 +53,7 @@ fun UpsertAlarmRoute(
 @Composable
 fun UpsertAlarmScreen(
     upsertAlarm: (AlarmItem) -> Unit,
-    onAddButtonClick: () -> Unit,
+    navigateToList: () -> Unit,
     modifier: Modifier,
     alarmItem: AlarmItem?
 ) {
@@ -89,7 +89,7 @@ fun UpsertAlarmScreen(
                     enabled = false
                 )
             )
-            onAddButtonClick()
+            navigateToList()
         }) {
             Text(text = "Add alarm")
         }
