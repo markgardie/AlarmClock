@@ -5,12 +5,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.alarmclock.ui.viewmodels.AlarmViewModel
 
 @Composable
 fun AlarmNavHost() {
     val navController = rememberNavController()
+    val alarmViewModel: AlarmViewModel = hiltViewModel()
     // A surface container using the 'background' color from the theme
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -24,11 +27,13 @@ fun AlarmNavHost() {
             alarmListScreen(
                 navigateToUpsert = {
                     navController.navigateToUpsertAlarm(it)
-                }
+                },
+                viewModel = alarmViewModel
             )
 
             upsertAlarmScreen(
-                navigateToList = navController::navigateToAlarmList
+                navigateToList = navController::navigateToAlarmList,
+                viewModel = alarmViewModel
             )
         }
 
