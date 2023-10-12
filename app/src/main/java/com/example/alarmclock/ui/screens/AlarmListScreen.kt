@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -107,12 +108,20 @@ fun AlarmsList(
     navigateToUpsert: (Int) -> Unit
 ) {
 
+    val listState = rememberLazyListState()
+
     LazyColumn(
+        state = listState,
         modifier = modifier
             .fillMaxSize()
             .padding(16.dp)
     ) {
-        items(alarms) {
+        items(
+            items = alarms,
+            key = { listItem ->
+                listItem.hashCode()
+            }
+            ) {
             AlarmDismissItem(
                 alarm = it,
                 onSwitchChange = onSwitchChange,
