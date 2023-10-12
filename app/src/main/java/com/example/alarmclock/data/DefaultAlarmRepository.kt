@@ -17,12 +17,8 @@ class DefaultAlarmRepository @Inject constructor(
             it.map(AlarmItemDbModel::asEntity)
         }
 
-    override suspend fun addAlarm(alarm: AlarmItem) {
-        alarmDao.addAlarm(alarm.asDbModel())
-    }
-
-    override suspend fun updateAlarm(alarm: AlarmItem) {
-        alarmDao.updateAlarm(alarm.asDbModel())
+    override suspend fun upsertAlarm(alarm: AlarmItem) {
+        alarmDao.upsertAlarm(alarm.asDbModel())
     }
 
     override suspend fun deleteAlarm(alarmId: Int) {

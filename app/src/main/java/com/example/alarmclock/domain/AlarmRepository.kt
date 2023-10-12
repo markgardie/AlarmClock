@@ -6,9 +6,7 @@ interface AlarmRepository {
 
     fun getAlarms(): Flow<List<AlarmItem>>
 
-    suspend fun addAlarm(alarm: AlarmItem)
-
-    suspend fun updateAlarm(alarm: AlarmItem)
+    suspend fun upsertAlarm(alarm: AlarmItem)
 
     suspend fun deleteAlarm(alarmId: Int)
 

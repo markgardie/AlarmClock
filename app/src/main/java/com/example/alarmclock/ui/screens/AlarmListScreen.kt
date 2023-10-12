@@ -48,7 +48,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun AlarmListRoute(
-    viewModel: AlarmViewModel = hiltViewModel(),
+    viewModel: AlarmViewModel,
     modifier: Modifier = Modifier,
     navigateToUpsert: (Int) -> Unit
 ) {
@@ -57,7 +57,7 @@ fun AlarmListRoute(
     AlarmListScreen(
         alarmUiState = uiState,
         navigateToUpsert = navigateToUpsert,
-        onSwitchChange = viewModel::updateAlarm,
+        onSwitchChange = viewModel::upsertAlarm,
         onDeleteAlarm = viewModel::deleteAlarm,
         modifier = modifier
     )

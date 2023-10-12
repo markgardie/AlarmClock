@@ -25,9 +25,9 @@ class AlarmViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), AlarmUiState.Loading)
 
 
-    fun addAlarm(alarmItem: AlarmItem) {
+    fun upsertAlarm(alarmItem: AlarmItem) {
         viewModelScope.launch {
-            repository.addAlarm(alarmItem)
+            repository.upsertAlarm(alarmItem)
         }
 
     }
@@ -37,12 +37,6 @@ class AlarmViewModel @Inject constructor(
             repository.deleteAlarm(alarmId)
         }
 
-    }
-
-    fun updateAlarm(alarmItem: AlarmItem) {
-        viewModelScope.launch {
-            repository.updateAlarm(alarmItem)
-        }
     }
 
 }

@@ -13,7 +13,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.alarmclock.domain.AlarmItem
 import com.example.alarmclock.ui.navigation.DEFAULT_ALARM_ID
@@ -25,7 +24,7 @@ import com.example.alarmclock.ui.viewmodels.AlarmViewModel
 
 @Composable
 fun UpsertAlarmRoute(
-    viewModel: AlarmViewModel = hiltViewModel(),
+    viewModel: AlarmViewModel,
     modifier: Modifier = Modifier,
     navigateToList: () -> Unit,
     alarmId: Int? = null,
@@ -41,10 +40,11 @@ fun UpsertAlarmRoute(
     val alarm = parseAlarmItem(alarms, alarmId ?: DEFAULT_ALARM_ID)
 
     UpsertAlarmScreen(
-        upsertAlarm = if (alarmId == DEFAULT_ALARM_ID) viewModel::addAlarm else viewModel::updateAlarm,
+        upsertAlarm = viewModel::upsertAlarm,
         modifier = modifier,
         navigateToList = navigateToList,
-        alarmItem = alarm
+        alarmItem = alarm,
+        alarmId = alarmId
     )
 
 }
@@ -55,6 +55,7 @@ fun UpsertAlarmScreen(
     upsertAlarm: (AlarmItem) -> Unit,
     navigateToList: () -> Unit,
     modifier: Modifier,
+    alarmId: Int?,
     alarmItem: AlarmItem?
 ) {
 
@@ -83,6 +84,7 @@ fun UpsertAlarmScreen(
         Button(onClick = {
             upsertAlarm(
                 AlarmItem(
+                    id = alarmId ?: DEFAULT_ALARM_ID,
                     hours = "${timePickerState.hour}",
                     minutes = "${timePickerState.minute}",
                     title = titleField,
