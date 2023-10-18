@@ -8,10 +8,15 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.example.alarmclock.data.scheduler.AndroidAlarmScheduler
+import com.example.alarmclock.domain.AlarmItem
 import com.example.alarmclock.ui.viewmodels.AlarmViewModel
 
 @Composable
-fun AlarmNavHost() {
+fun AlarmNavHost(
+    schedule: (AlarmItem) -> Unit,
+    cancel: (AlarmItem) -> Unit
+) {
     val navController = rememberNavController()
     val alarmViewModel: AlarmViewModel = hiltViewModel()
     // A surface container using the 'background' color from the theme
@@ -28,12 +33,14 @@ fun AlarmNavHost() {
                 navigateToUpsert = {
                     navController.navigateToUpsertAlarm(it)
                 },
-                viewModel = alarmViewModel
+                viewModel = alarmViewModel,
+                cancel = cancel
             )
 
             upsertAlarmScreen(
                 navigateToList = navController::navigateToAlarmList,
-                viewModel = alarmViewModel
+                viewModel = alarmViewModel,
+                schedule = schedule
             )
         }
 

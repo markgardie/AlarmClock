@@ -38,7 +38,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.alarmclock.domain.AlarmItem
 import com.example.alarmclock.ui.navigation.DEFAULT_ALARM_ID
@@ -51,7 +50,8 @@ import kotlinx.coroutines.delay
 fun AlarmListRoute(
     viewModel: AlarmViewModel,
     modifier: Modifier = Modifier,
-    navigateToUpsert: (Int) -> Unit
+    navigateToUpsert: (Int) -> Unit,
+    cancel: (AlarmItem) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -60,7 +60,8 @@ fun AlarmListRoute(
         navigateToUpsert = navigateToUpsert,
         onSwitchChange = viewModel::upsertAlarm,
         onDeleteAlarm = viewModel::deleteAlarm,
-        modifier = modifier
+        modifier = modifier,
+        cancel = cancel
     )
 
 }
@@ -71,7 +72,8 @@ fun AlarmListScreen(
     navigateToUpsert: (Int) -> Unit,
     onSwitchChange: (AlarmItem) -> Unit,
     onDeleteAlarm: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    cancel: (AlarmItem) -> Unit
 ) {
 
     when (alarmUiState) {
@@ -80,7 +82,8 @@ fun AlarmListScreen(
             alarms = alarmUiState.alarms,
             onSwitchChange = onSwitchChange,
             onDeleteAlarm = onDeleteAlarm,
-            navigateToUpsert = navigateToUpsert
+            navigateToUpsert = navigateToUpsert,
+            cancel = cancel
         )
 
         is AlarmUiState.Empty -> EmptyState(modifier = modifier)
@@ -105,7 +108,8 @@ fun AlarmsList(
     onSwitchChange: (AlarmItem) -> Unit,
     onDeleteAlarm: (Int) -> Unit,
     alarms: List<AlarmItem>,
-    navigateToUpsert: (Int) -> Unit
+    navigateToUpsert: (Int) -> Unit,
+    cancel: (AlarmItem) -> Unit
 ) {
 
     val listState = rememberLazyListState()
@@ -126,7 +130,8 @@ fun AlarmsList(
                 alarm = it,
                 onSwitchChange = onSwitchChange,
                 onDeleteAlarm = onDeleteAlarm,
-                navigateToUpsert = navigateToUpsert
+                navigateToUpsert = navigateToUpsert,
+                cancel = cancel
             )
         }
     }
@@ -138,7 +143,8 @@ fun AlarmDismissItem(
     onSwitchChange: (AlarmItem) -> Unit,
     onDeleteAlarm: (Int) -> Unit,
     alarm: AlarmItem,
-    navigateToUpsert: (Int) -> Unit
+    navigateToUpsert: (Int) -> Unit,
+    cancel: (AlarmItem) -> Unit
 ) {
 
     var show by remember { mutableStateOf(true) }
@@ -175,6 +181,7 @@ fun AlarmDismissItem(
         if (!show) {
             delay(800)
             onDeleteAlarm(currentItem.id)
+            cancel(currentItem)
         }
     }
 
@@ -203,7 +210,7 @@ fun AlarmCard(
                 horizontalAlignment = Alignment.Start
             ) {
                 Text(
-                    text = "${alarm.hours}:${alarm.minutes}",
+                    text = "${alarm.hour}:${alarm.minute}",
                     style = MaterialTheme.typography.titleLarge
                 )
                 Text(

@@ -28,6 +28,7 @@ fun UpsertAlarmRoute(
     modifier: Modifier = Modifier,
     navigateToList: () -> Unit,
     alarmId: Int? = null,
+    schedule: (AlarmItem) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -44,7 +45,8 @@ fun UpsertAlarmRoute(
         modifier = modifier,
         navigateToList = navigateToList,
         alarmItem = alarm,
-        alarmId = alarmId
+        alarmId = alarmId,
+        schedule = schedule
     )
 
 }
@@ -56,7 +58,8 @@ fun UpsertAlarmScreen(
     navigateToList: () -> Unit,
     modifier: Modifier,
     alarmId: Int?,
-    alarmItem: AlarmItem?
+    alarmItem: AlarmItem?,
+    schedule: (AlarmItem) -> Unit
 ) {
 
     Column(
@@ -66,8 +69,8 @@ fun UpsertAlarmScreen(
     ) {
         val timePickerState = rememberTimePickerState(
             is24Hour = true,
-            initialHour = alarmItem?.hours?.toInt() ?: 0,
-            initialMinute = alarmItem?.minutes?.toInt() ?: 0
+            initialHour = alarmItem?.hour ?: 0,
+            initialMinute = alarmItem?.minute ?: 0
         )
         var titleField by remember {
             mutableStateOf(alarmItem?.title ?: "")
@@ -82,15 +85,15 @@ fun UpsertAlarmScreen(
         )
         
         Button(onClick = {
-            upsertAlarm(
-                AlarmItem(
-                    id = alarmId ?: DEFAULT_ALARM_ID,
-                    hours = "${timePickerState.hour}",
-                    minutes = "${timePickerState.minute}",
-                    title = titleField,
-                    enabled = false
-                )
+            val alarm = AlarmItem(
+                id = alarmId ?: DEFAULT_ALARM_ID,
+                hour = timePickerState.hour,
+                minute = timePickerState.minute,
+                title = titleField,
+                enabled = false
             )
+            upsertAlarm(alarm)
+            schedule(alarm)
             navigateToList()
         }) {
             Text(text = "Add alarm")

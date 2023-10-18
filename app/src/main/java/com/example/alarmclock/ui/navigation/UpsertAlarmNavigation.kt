@@ -6,6 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.alarmclock.domain.AlarmItem
 import com.example.alarmclock.ui.screens.UpsertAlarmRoute
 import com.example.alarmclock.ui.viewmodels.AlarmViewModel
 
@@ -22,7 +23,8 @@ fun NavController.navigateToUpsertAlarm(alarmId: Int) {
 
 fun NavGraphBuilder.upsertAlarmScreen(
     navigateToList: () -> Unit,
-    viewModel: AlarmViewModel
+    viewModel: AlarmViewModel,
+    schedule: (AlarmItem) -> Unit
 ) {
     composable(
         route = upsertAlarmRoute,
@@ -37,7 +39,8 @@ fun NavGraphBuilder.upsertAlarmScreen(
         UpsertAlarmRoute(
             navigateToList = navigateToList,
             alarmId = alarmId,
-            viewModel = viewModel
+            viewModel = viewModel,
+            schedule = schedule
         )
     }
 }
