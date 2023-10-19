@@ -18,7 +18,8 @@ fun NavController.navigateToAlarmList(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.alarmListScreen(
     navigateToUpsert: (Int) -> Unit,
     viewModel: AlarmViewModel,
-    cancel: (AlarmItem) -> Unit
+    cancel: (AlarmItem) -> Unit,
+    schedule: (AlarmItem) -> Unit
 ) {
     composable(
         route = alarmListRoute
@@ -27,7 +28,8 @@ fun NavGraphBuilder.alarmListScreen(
         AlarmListRoute(
             navigateToUpsert = navigateToUpsert,
             viewModel = viewModel,
-            cancel = cancel
+            cancel = cancel,
+            schedule = schedule
         )
     }
 }

@@ -90,7 +90,7 @@ fun UpsertAlarmScreen(
                 hour = timePickerState.hour,
                 minute = timePickerState.minute,
                 title = titleField,
-                enabled = false
+                enabled = true
             )
             upsertAlarm(alarm)
             schedule(alarm)

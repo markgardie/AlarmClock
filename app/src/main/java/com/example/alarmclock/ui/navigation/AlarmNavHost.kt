@@ -34,7 +34,8 @@ fun AlarmNavHost(
                     navController.navigateToUpsertAlarm(it)
                 },
                 viewModel = alarmViewModel,
-                cancel = cancel
+                cancel = cancel,
+                schedule = schedule
             )
 
             upsertAlarmScreen(

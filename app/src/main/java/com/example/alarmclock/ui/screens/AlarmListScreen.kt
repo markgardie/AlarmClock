@@ -51,7 +51,8 @@ fun AlarmListRoute(
     viewModel: AlarmViewModel,
     modifier: Modifier = Modifier,
     navigateToUpsert: (Int) -> Unit,
-    cancel: (AlarmItem) -> Unit
+    cancel: (AlarmItem) -> Unit,
+    schedule: (AlarmItem) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -61,7 +62,8 @@ fun AlarmListRoute(
         onSwitchChange = viewModel::upsertAlarm,
         onDeleteAlarm = viewModel::deleteAlarm,
         modifier = modifier,
-        cancel = cancel
+        cancel = cancel,
+        schedule = schedule
     )
 
 }
@@ -73,7 +75,8 @@ fun AlarmListScreen(
     onSwitchChange: (AlarmItem) -> Unit,
     onDeleteAlarm: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    cancel: (AlarmItem) -> Unit
+    cancel: (AlarmItem) -> Unit,
+    schedule: (AlarmItem) -> Unit
 ) {
 
     when (alarmUiState) {
@@ -83,7 +86,8 @@ fun AlarmListScreen(
             onSwitchChange = onSwitchChange,
             onDeleteAlarm = onDeleteAlarm,
             navigateToUpsert = navigateToUpsert,
-            cancel = cancel
+            cancel = cancel,
+            schedule = schedule
         )
 
         is AlarmUiState.Empty -> EmptyState(modifier = modifier)
@@ -109,7 +113,8 @@ fun AlarmsList(
     onDeleteAlarm: (Int) -> Unit,
     alarms: List<AlarmItem>,
     navigateToUpsert: (Int) -> Unit,
-    cancel: (AlarmItem) -> Unit
+    cancel: (AlarmItem) -> Unit,
+    schedule: (AlarmItem) -> Unit
 ) {
 
     val listState = rememberLazyListState()
@@ -131,7 +136,8 @@ fun AlarmsList(
                 onSwitchChange = onSwitchChange,
                 onDeleteAlarm = onDeleteAlarm,
                 navigateToUpsert = navigateToUpsert,
-                cancel = cancel
+                cancel = cancel,
+                schedule = schedule
             )
         }
     }
@@ -144,7 +150,8 @@ fun AlarmDismissItem(
     onDeleteAlarm: (Int) -> Unit,
     alarm: AlarmItem,
     navigateToUpsert: (Int) -> Unit,
-    cancel: (AlarmItem) -> Unit
+    cancel: (AlarmItem) -> Unit,
+    schedule: (AlarmItem) -> Unit
 ) {
 
     var show by remember { mutableStateOf(true) }
@@ -170,7 +177,9 @@ fun AlarmDismissItem(
                 AlarmCard(
                     onSwitchChange = onSwitchChange,
                     alarm = alarm,
-                    navigateToUpsert = navigateToUpsert
+                    navigateToUpsert = navigateToUpsert,
+                    cancel = cancel,
+                    schedule = schedule
                 )
             }
         )
@@ -192,7 +201,9 @@ fun AlarmCard(
     modifier: Modifier = Modifier,
     onSwitchChange: (AlarmItem) -> Unit,
     alarm: AlarmItem,
-    navigateToUpsert: (Int) -> Unit
+    navigateToUpsert: (Int) -> Unit,
+    cancel: (AlarmItem) -> Unit,
+    schedule: (AlarmItem) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -226,6 +237,12 @@ fun AlarmCard(
             Switch(modifier = modifier.padding(8.dp), checked = checked, onCheckedChange = {
                 checked = it
                 onSwitchChange.invoke(alarm.copy(enabled = it))
+                if (checked) {
+                    schedule(alarm)
+                }
+                else {
+                    cancel(alarm)
+                }
             })
         }
     }
