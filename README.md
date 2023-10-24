@@ -23,7 +23,7 @@
 - Jetpack Compose
 - Compose Navigation
 - Dagger-Hilt
-
+- AlarmManager, BroadcastReceiver, Notifications
 
 ## Contacts
 
